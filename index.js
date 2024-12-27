@@ -1,8 +1,10 @@
 const express = require('express')
 const app = express()
+const path = require('path');
 
 const cors = require('cors')
 app.use(cors())
+app.use(express.static('dist'))
 
 let notes = [
   {
@@ -37,8 +39,11 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
+// Serve static files from the 'dist' directory
+app.use(express.static(path.join(__dirname, 'dist')));
+
 app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
+  response.sendFile(path.join(__dirname, 'dist', 'index.html'));
 })
 
 app.get('/api/notes', (request, response) => {
